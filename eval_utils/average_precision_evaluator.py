@@ -844,8 +844,6 @@ class Evaluator:
             average_precision = 0.0
             average_match = 0.0
 
-            #for i in range(gt_match_overlap.size):
-            #    average_match += gt_match_overlap
             average_match = np.sum(gt_match_overlap)
 
             if mode == 'sample':
