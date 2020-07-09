@@ -358,7 +358,6 @@ def resnet50_ssd_300(image_size,
     ############################################################################
 
     x = Input(shape=(img_height, img_width, img_channels))
-    print('x = ', x)
 
     # The following identity layer is only needed so that the subsequent lambda layers can be optional.
     x1 = Lambda(identity_layer, output_shape=(img_height, img_width, img_channels), name='identity_layer')(x)
@@ -368,7 +367,6 @@ def resnet50_ssd_300(image_size,
         x1 = Lambda(input_stddev_normalization, output_shape=(img_height, img_width, img_channels), name='input_stddev_normalization')(x1)
     if swap_channels:
         x1 = Lambda(input_channel_swap, output_shape=(img_height, img_width, img_channels), name='input_channel_swap')(x1)
-    print('x1 = ', x1)
 
     x2 = ZeroPadding2D(padding=(3, 3), name='conv1_pad')(x1)  #####
     x3 = Conv2D(64, (7, 7), strides=(2, 2), padding='valid', kernel_initializer='he_normal', name='conv1')(x2)
@@ -376,50 +374,40 @@ def resnet50_ssd_300(image_size,
     x5 = Activation('relu')(x4)
     x6 = ZeroPadding2D(padding=(1, 1), name='pool1_pad')(x5)
     x7 = MaxPooling2D((3, 3), strides=(2, 2))(x6)
-    print('x7 = ', x7)
 
     conv1 = conv_block(x7, 3, [64, 64, 256], stage=2, block='a', strides=(1, 1))
     iden1_1 = identity_block(conv1, 3, [64, 64, 256], stage=2, block='b')
     iden1_2 = identity_block(iden1_1, 3, [64, 64, 256], stage=2, block='c')
-    print('iden1_2 = ', iden1_2)
 
     conv2 = conv_block(iden1_2, 3, [128, 128, 512], stage=3, block='a')
     iden2_1 = identity_block(conv2, 3, [128, 128, 512], stage=3, block='b')
     iden2_2 = identity_block(iden2_1, 3, [128, 128, 512], stage=3, block='c')
     iden2_3 = identity_block(iden2_2, 3, [128, 128, 512], stage=3, block='d')
-    print('iden2_3 = ', iden2_3)
 
     conv3 = conv_block(iden2_3, 3, [256, 256, 1024], stage=4, block='a')
     iden3_1 = identity_block(conv3, 3, [256, 256, 1024], stage=4, block='b')
     iden3_2 = identity_block(iden3_1, 3, [256, 256, 1024], stage=4, block='c')
     iden3_3 = identity_block(iden3_2, 3, [256, 256, 1024], stage=4, block='d')
     iden3_4 = identity_block(iden3_3, 3, [256, 256, 1024], stage=4, block='e')
-    iden3_5 = identity_block(iden3_4, 3, [256, 256, 1024], stage=4, block='f')
-    print('iden3_5 = ', iden3_5)  #####
+    iden3_5 = identity_block(iden3_4, 3, [256, 256, 1024], stage=4, block='f')  #####
 
     fc6 = Conv2D(1024, (3, 3), dilation_rate=(6, 6), activation='relu', padding='same', kernel_initializer='he_normal', kernel_regularizer=l2(l2_reg), name='fc6')(iden3_5)
-    print('fc6 = ', fc6)
 
     fc7 = Conv2D(1024, (1, 1), activation='relu', padding='same', kernel_initializer='he_normal', kernel_regularizer=l2(l2_reg), name='fc7')(fc6)
-    print('fc7 = ', fc7)
 
     conv6_1 = Conv2D(256, (1, 1), activation='relu', padding='same', kernel_initializer='he_normal', kernel_regularizer=l2(l2_reg), name='conv6_1')(fc7)
     conv6_1 = ZeroPadding2D(padding=((1, 1), (1, 1)), name='conv6_padding')(conv6_1)
     conv6_2 = Conv2D(512, (3, 3), strides=(2, 2), activation='relu', padding='valid', kernel_initializer='he_normal', kernel_regularizer=l2(l2_reg), name='conv6_2')(conv6_1)
-    print('conv6_2 = ', conv6_2)
 
     conv7_1 = Conv2D(128, (1, 1), activation='relu', padding='same', kernel_initializer='he_normal', kernel_regularizer=l2(l2_reg), name='conv7_1')(conv6_2)
     conv7_1 = ZeroPadding2D(padding=((1, 1), (1, 1)), name='conv7_padding')(conv7_1)
     conv7_2 = Conv2D(256, (3, 3), strides=(2, 2), activation='relu', padding='valid', kernel_initializer='he_normal', kernel_regularizer=l2(l2_reg), name='conv7_2')(conv7_1)
-    print('conv7_2 = ', conv7_2)
 
     conv8_1 = Conv2D(128, (1, 1), activation='relu', padding='same', kernel_initializer='he_normal', kernel_regularizer=l2(l2_reg), name='conv8_1')(conv7_2)
     conv8_2 = Conv2D(256, (3, 3), strides=(1, 1), activation='relu', padding='valid', kernel_initializer='he_normal', kernel_regularizer=l2(l2_reg), name='conv8_2')(conv8_1)
-    print('conv8_2 = ', conv8_2)
 
     conv9_1 = Conv2D(128, (1, 1), activation='relu', padding='same', kernel_initializer='he_normal', kernel_regularizer=l2(l2_reg), name='conv9_1')(conv8_2)
     conv9_2 = Conv2D(256, (3, 3), strides=(1, 1), activation='relu', padding='valid', kernel_initializer='he_normal', kernel_regularizer=l2(l2_reg), name='conv9_2')(conv9_1)
-    print('conv9_2 = ', conv9_2)
 
     # Feed conv4_3 into the L2 normalization layer
     conv4_3_norm = L2Normalization(gamma_init=20, name='conv4_3_norm')(iden2_3)
