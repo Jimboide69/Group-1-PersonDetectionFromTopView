@@ -86,8 +86,8 @@ class Evaluator:
         self.false_positives = None
         self.cumulative_true_positives = None
         self.cumulative_false_positives = None
-        self.gt_match_overlaps = None # Aggiunto
-        self.average_matches = None # Aggiunto
+        self.gt_match_overlaps = None # Added
+        self.average_matches = None # Added
         self.cumulative_precisions = None # "Cumulative" means that the i-th element in each list represents the precision for the first i highest condidence predictions for that class.
         self.cumulative_recalls = None # "Cumulative" means that the i-th element in each list represents the recall for the first i highest condidence predictions for that class.
         self.average_precisions = None
@@ -107,9 +107,9 @@ class Evaluator:
                  ignore_neutral_boxes=True,
                  return_precisions=False,
                  return_recalls=False,
-                 return_matches=False, # Aggiunto
+                 return_matches=False, # Added
                  return_average_precisions=False,
-                 return_average_matches=False, # Aggiunto
+                 return_average_matches=False, # Added
                  verbose=True,
                  decoding_confidence_thresh=0.01,
                  decoding_iou_threshold=0.45,
@@ -163,7 +163,9 @@ class Evaluator:
                 annotated as "difficult" in the Pascal VOC datasets, which are usually treated as neutral for the evaluation.
             return_precisions (bool, optional): If `True`, returns a nested list containing the cumulative precisions for each class.
             return_recalls (bool, optional): If `True`, returns a nested list containing the cumulative recalls for each class.
+            return_matches (bool, optional): If `True`, returns a nested list containing the iou for each class.
             return_average_precisions (bool, optional): If `True`, returns a list containing the average precision for each class.
+            return_average_matches (bool, optional): If `True`, returns a list containing the average iou for each class.
             verbose (bool, optional): If `True`, will print out the progress during runtime.
             decoding_confidence_thresh (float, optional): Only relevant if the model is in 'training' mode.
                 A float in [0,1), the minimum classification confidence in a specific positive class in order to be considered
@@ -608,7 +610,7 @@ class Evaluator:
         false_positives = [[]] # The true positives for each class, sorted by descending confidence.
         cumulative_true_positives = [[]]
         cumulative_false_positives = [[]]
-        gt_match_overlaps = [[]]
+        gt_match_overlaps = [[]] # Added
 
         # Iterate over all classes.
         for class_id in range(1, self.n_classes + 1):
@@ -792,7 +794,7 @@ class Evaluator:
 
     def compute_average_precisions(self, mode='sample', num_recall_points=11, verbose=True, ret=False):
         '''
-        Computes the average precision for each class.
+        Computes the average precision and the average iou for each class.
 
         Can compute the Pascal-VOC-style average precision in both the pre-2010 (k-point sampling)
         and post-2010 (integration) algorithm versions.

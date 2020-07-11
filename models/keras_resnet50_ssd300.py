@@ -16,33 +16,31 @@ See the License for the specific language governing permissions and
 limitations under the License.
 '''
 
-from __future__ import absolute_import  #
 from __future__ import division
-from __future__ import print_function   #
 import numpy as np
 from keras.models import Model
 from keras.layers import add, Input, Lambda, Activation, Conv2D, MaxPooling2D, ZeroPadding2D, Reshape, Concatenate, BatchNormalization, GlobalAveragePooling2D, Dense, GlobalMaxPooling2D
 from keras.regularizers import l2
 import keras.backend as K
 
-import os   #
-import warnings #
-
 from keras_layers.keras_layer_AnchorBoxes import AnchorBoxes
 from keras_layers.keras_layer_L2Normalization import L2Normalization
 from keras_layers.keras_layer_DecodeDetections import DecodeDetections
 from keras_layers.keras_layer_DecodeDetectionsFast import DecodeDetectionsFast
 
-def identity_block(input_tensor, kernel_size, filters, stage, block):   #
-    """The identity block is the block that has no conv layer at shortcut.
-    # Arguments
+def identity_block(input_tensor, kernel_size, filters, stage, block):
+    """
+    The identity block is the block that has no conv layer at shortcut.
+
+    Arguments:
         input_tensor: input tensor
         kernel_size: default 3, the kernel size of
             middle conv layer at main path
         filters: list of integers, the filters of 3 conv layer at main path
         stage: integer, current stage label, used for generating layer names
         block: 'a','b'..., current block label, used for generating layer names
-    # Returns
+
+    Returns:
         Output tensor for the block.
     """
     filters1, filters2, filters3 = filters
@@ -72,14 +70,16 @@ def identity_block(input_tensor, kernel_size, filters, stage, block):   #
     x = Activation('relu')(x)
     return x
 
-def conv_block(input_tensor,    #
+def conv_block(input_tensor,
                kernel_size,
                filters,
                stage,
                block,
                strides=(2, 2)):
-    """A block that has a conv layer at shortcut.
-    # Arguments
+    """
+    A block that has a conv layer at shortcut.
+
+    Arguments:
         input_tensor: input tensor
         kernel_size: default 3, the kernel size of
             middle conv layer at main path
@@ -87,8 +87,10 @@ def conv_block(input_tensor,    #
         stage: integer, current stage label, used for generating layer names
         block: 'a','b'..., current block label, used for generating layer names
         strides: Strides for the first conv layer in the block.
-    # Returns
+
+    Returns:
         Output tensor for the block.
+
     Note that from stage 3,
     the first conv layer at main path is with strides=(2, 2)
     And the shortcut should have strides=(2, 2) as well
@@ -157,8 +159,7 @@ def resnet50_ssd_300(image_size,
     '''
     Build a Keras model with SSD300 architecture, see references.
 
-    The base network is a reduced atrous VGG-16, extended by the SSD architecture,
-    as described in the paper.
+    The base network is a reduced atrous ResNet50, extended by the SSD architecture.
 
     Most of the arguments that this function takes are only needed for the anchor
     box layers. In case you're training the network, the parameters passed here must
@@ -368,7 +369,7 @@ def resnet50_ssd_300(image_size,
     if swap_channels:
         x1 = Lambda(input_channel_swap, output_shape=(img_height, img_width, img_channels), name='input_channel_swap')(x1)
 
-    x2 = ZeroPadding2D(padding=(3, 3), name='conv1_pad')(x1)  #####
+    x2 = ZeroPadding2D(padding=(3, 3), name='conv1_pad')(x1)
     x3 = Conv2D(64, (7, 7), strides=(2, 2), padding='valid', kernel_initializer='he_normal', name='conv1')(x2)
     x4 = BatchNormalization(axis=3, name='bn_conv1')(x3)
     x5 = Activation('relu')(x4)
@@ -389,7 +390,7 @@ def resnet50_ssd_300(image_size,
     iden3_2 = identity_block(iden3_1, 3, [256, 256, 1024], stage=4, block='c')
     iden3_3 = identity_block(iden3_2, 3, [256, 256, 1024], stage=4, block='d')
     iden3_4 = identity_block(iden3_3, 3, [256, 256, 1024], stage=4, block='e')
-    iden3_5 = identity_block(iden3_4, 3, [256, 256, 1024], stage=4, block='f')  #####
+    iden3_5 = identity_block(iden3_4, 3, [256, 256, 1024], stage=4, block='f')
 
     fc6 = Conv2D(1024, (3, 3), dilation_rate=(6, 6), activation='relu', padding='same', kernel_initializer='he_normal', kernel_regularizer=l2(l2_reg), name='fc6')(iden3_5)
 
@@ -409,7 +410,7 @@ def resnet50_ssd_300(image_size,
     conv9_1 = Conv2D(128, (1, 1), activation='relu', padding='same', kernel_initializer='he_normal', kernel_regularizer=l2(l2_reg), name='conv9_1')(conv8_2)
     conv9_2 = Conv2D(256, (3, 3), strides=(1, 1), activation='relu', padding='valid', kernel_initializer='he_normal', kernel_regularizer=l2(l2_reg), name='conv9_2')(conv9_1)
 
-    # Feed conv4_3 into the L2 normalization layer
+    # Feed iden2_3 into the L2 normalization layer
     conv4_3_norm = L2Normalization(gamma_init=20, name='conv4_3_norm')(iden2_3)
 
     ### Build the convolutional predictor layers on top of the base network

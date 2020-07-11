@@ -20,8 +20,6 @@ from __future__ import division
 import tensorflow as tf
 from keras import backend as K
 
-#from bounding_box_utils.bounding_box_utils import iou
-
 class SSDLossMetrics:
     '''
     The SSD loss, see https://arxiv.org/abs/1512.02325.
