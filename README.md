@@ -38,5 +38,8 @@ How to evaluate a trained model:
 * [`ssd512_vgg16_evaluation.ipynb`](ssd512_vgg16_evaluation.ipynb)
 * [`ssd512_resnet60_evaluation.ipynb`](ssd512_resnet60_evaluation.ipynb)
 
+Link to Download the weights for all the models trained on CV&DL Dataset:
+[Weights of SSD7/SSD300/SSD512](https://mega.nz/file/PMJG2Coa#HPIxOnqHbMUotlb-uJa8SuVWd-mpOd9p2jUtrBtUHbg)
+
 Link to Download the Dataset:
-https://drive.google.com/file/d/1mixMS8lWmjqeiCQuK7pHdw3M47tMohQj/view?usp=sharing
+[CV&DL Dataset](https://drive.google.com/file/d/1mixMS8lWmjqeiCQuK7pHdw3M47tMohQj/view?usp=sharing)
