@@ -1,4 +1,6 @@
-# Group-1-PersonDetectionFromTopView
+## Group-1-PersonDetectionFromTopView
+---
+### Overview
 
 This is a Keras port of the SSD model architecture, introduced by Wei Liu et al. in the paper [SSD: Single Shot MultiBox Detector](https://arxiv.org/abs/1512.02325), modified to adapt it to the Person Detection from a Top-View Perspective in a retail environment.
 
@@ -9,7 +11,32 @@ The repository currently provides the following network architectures:
 * SSD512-ResNet50: [`keras_resnet50_ssd512.py`](models/keras_resnet50_ssd512.py)
 * SSD7: [`keras_ssd7.py`](models/keras_ssd7.py) - a smaller 7-layer version
 
-The notebooks in this repository are used to train and evaluate the various architectures of the SSD used in the Computer Vision and Deep Learning project. The few things to change are the paths to any weights and folders containing the dataset.
+The notebooks in this repository are used to train and evaluate the various architectures of the SSD used in the Computer Vision and Deep Learning project.
+
+The following presentation briefly explains the work done: [Person Detection from a Top-View Perspctive](Baldascino-Squarcella_v6.pptx)
+
+### How to use it
+
+This repository provides Jupyter notebook that explain training, inference and evaluation for the various architectures of the SSD used in the Computer Vision and Deep Learning project. The few things to change are the paths to any weights and folders containing the dataset.
+
+How to use a trained model for inference:
+* [`ssd300_vgg16_inference.ipynb`](ssd300_vgg16_inference.ipynb)
+* [`ssd300__resnet50_inference.ipynb`](ssd300__resnet50_inference.ipynb)
+* [`ssd512_vgg16_inference.ipynb`](ssd512_vgg16_inference.ipynb)
+* [`ssd512_resnet50_inference.ipynb`](ssd512_resnet50_inference.ipynb)
+
+How to train a model:
+* [`ssd300_vgg16_training.ipynb`](ssd300_vgg16_training.ipynb)
+* [`ssd300_resnet50_training.ipynb`](ssd300_resnet50_training.ipynb)
+* [`ssd512_vgg16_training.ipynb`](ssd512_vgg16_training.ipynb)
+* [`ssd512_resnet50_training.ipynb`](ssd512_resnet50_training.ipynb)
+* [`ssd7_training.ipynb`](ssd7_vgg16_training.ipynb)
+
+How to evaluate a trained model:
+* [`ssd300_vgg16_evaluation.ipynb`](ssd300_vgg16_evaluation.ipynb)
+* [`ssd300_resnet50_evaluation.ipynb`](ssd300_resnet50_evaluation.ipynb)
+* [`ssd512_vgg16_evaluation.ipynb`](ssd512_vgg16_evaluation.ipynb)
+* [`ssd512_resnet60_evaluation.ipynb`](ssd512_resnet60_evaluation.ipynb)
 
 Link to Download the Dataset:
 https://drive.google.com/file/d/1mixMS8lWmjqeiCQuK7pHdw3M47tMohQj/view?usp=sharing
