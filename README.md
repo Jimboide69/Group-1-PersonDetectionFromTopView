@@ -2,7 +2,7 @@
 ---
 ### Overview
 
-This is a Keras port of the SSD model architecture, introduced by Wei Liu et al. in the paper [SSD: Single Shot MultiBox Detector](https://arxiv.org/abs/1512.02325), modified to adapt it to the Project in a retail environment.
+This is a Keras port of the SSD model architecture, introduced by Wei Liu et al. in the paper [SSD: Single Shot MultiBox Detector](https://arxiv.org/abs/1512.02325), modified to adapt it to the [Project](Person Detection from Top-View Perspective.pdf) in a retail environment.
 
 The repository currently provides the following network architectures:
 * SSD300-VGG16: [`keras_vgg16_ssd300.py`](models/keras_ssd300.py)
